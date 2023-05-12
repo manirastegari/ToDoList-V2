@@ -14,7 +14,7 @@ app.use(express.static("public"));
 
 // then we will create new database inside MongoDB
 // mongodb://localhost:27017/todolistDB
-// mongodb+srv://mani16032:mani16032@test.3pfif5i.mongodb.net/?retryWrites=true&w=majority
+// mongodb+srv://mani16032:<pass>@test.3pfif5i.mongodb.net/?retryWrites=true&w=majority
 mongoose.connect("mongodb://localhost:27017/todolistDB", {useNewUrlParser: true});
 
 // we will delete this in order to be able to use mongo and mongoose instead
@@ -147,14 +147,42 @@ findOrCreateList(customListName);
 app.post("/", function(req, res){
 
   const itemName = req.body.newItem;
+  const listName = req.body.list;
 
   const item = new Item({
     name: itemName
   });
 
-  item.save();
-  
-  res.redirect("/");
+  if (listName === "Today") {
+    item.save();
+    res.redirect("/");
+  } else {
+    List.findOne({ name: listName })
+  .then(foundList => {
+    foundList.items.push(item);
+    return foundList.save();
+  })
+  .then(() => {
+    res.redirect("/" + listName);
+  })
+  .catch(err => {
+    // Handle any errors that occurred during the process
+    console.error(err);
+    // Respond with an error message or redirect to an error page
+    res.status(500).send("An error occurred");
+  });
+
+
+
+
+    // List.findOne({name: listName}, function(err, foundList) {
+    //   foundList.items.push(item);
+    //   foundList.save();
+    //   res.redirect("/", + listName);
+    // });
+  }
+
+
 
   // if (req.body.list === "Work") {
   //   workItems.push(item);
@@ -190,5 +218,5 @@ app.get("/about", function(req, res){
 });
 
 app.listen(3000, function() {
-  console.log("Server started on port 3000");
+  console.log("Server started on port 3000.");
 });
