@@ -3,7 +3,7 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose")
-// const date = require(__dirname + "/date.js");
+const _ = require("lodash");
 
 const app = express();
 
@@ -73,10 +73,9 @@ app.get("/", function(req, res) {
 });
 
 app.get("/:customListName", function(req, res){
-  const customListName = req.params.customListName;
+  const customListName = _.capitalize(req.params.customListName);
 
 // here we will get an object back
-
 async function findOrCreateList(customListName) {
   try {
     const foundList = await List.findOne({ name: customListName });
@@ -94,9 +93,7 @@ async function findOrCreateList(customListName) {
     }
   } catch (err) {
     // Handle any errors that occurred during the process
-    // and provide an appropriate response
     console.error(err);
-    // Add your error handling logic here
   }
 }
 
