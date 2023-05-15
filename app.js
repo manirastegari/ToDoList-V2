@@ -15,7 +15,7 @@ app.use(express.static("public"));
 // then we will create new database inside MongoDB
 // mongodb://localhost:27017/todolistDB
 // mongodb+srv://mani16032:<pass>@test.3pfif5i.mongodb.net/?retryWrites=true&w=majority
-mongoose.connect("mongodb://localhost:27017/todolistDB", {useNewUrlParser: true});
+mongoose.connect("mongodb+srv://mani16032:mani16032@cluster0.idomekg.mongodb.net/?retryWrites=true&w=majority", {useNewUrlParser: true});
 
 // we will delete this in order to be able to use mongo and mongoose instead
 // const items = ["Buy Food", "Cook Food", "Eat Food"];
